@@ -5,8 +5,8 @@ class User {
   //1.아이디, 비밀번호를 받아서 userid를 취득
   userLogin(userid, pwd, success, error) {
     if (
-      (userid === "iamvip" && pwd === "password") ||
-      (userid === "normal" && pwd === "password")
+      (userid === "iamvip" && pwd === "pass") ||
+      (userid === "iamuser" && pwd === "pass")
     ) {
       success(userid);
       console.log(userid);
@@ -27,46 +27,133 @@ class User {
   //3. 유저의 amount 정보를 가지고 유저의 티어를 결정
   gerUserTire(amount, userid, success, error) {
     if (amount > 10000) {
-      success({ userid: userid, amount: "10000", tire: "VIP" });
+      success({ userid: userid, amount: amount, tire: "VIP" });
     } else if (amount < 10000 && amount > 0) {
-      success({ userid: userid, amount: "10000", tire: "user" });
+      success({ userid: userid, amount: amount, tire: "user" });
     } else {
       error(new Error("something went wrong"));
     }
   }
 }
 
-//콜백으로 짜면 아래처럼 된다고 볼수있다.
-const user = new User();
-const id = prompt("put your id");
-const pwd = prompt("put your password");
+//콜백으로 처리했을때
+const callbackApp = () => {
+  const id = prompt("put your id");
+  const pwd = prompt("put your password");
 
-user.userLogin(
-  id,
-  pwd,
-  (userid) => {
-    user.getUserInfo(
-      userid,
-      (userinfo) => {
-        user.gerUserTire(
-          userinfo.amount,
-          userinfo.userid,
-          (usertire) => {
-            alert(
-              `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
-            );
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  },
-  (error) => {
-    console.log(error);
+  user.userLogin(
+    id,
+    pwd,
+    (userid) => {
+      user.getUserInfo(
+        userid,
+        (userinfo) => {
+          user.gerUserTire(
+            userinfo.amount,
+            userinfo.userid,
+            (usertire) => {
+              alert(
+                `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
+              );
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const promiseApp = () => {
+  const id = prompt("put your id");
+  const pwd = prompt("put your password");
+
+  user.userLogin(
+    id,
+    pwd,
+    (userid) => {
+      user.getUserInfo(
+        userid,
+        (userinfo) => {
+          user.gerUserTire(
+            userinfo.amount,
+            userinfo.userid,
+            (usertire) => {
+              alert(
+                `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
+              );
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const asyncApp = () => {
+  const id = prompt("put your id");
+  const pwd = prompt("put your password");
+
+  user.userLogin(
+    id,
+    pwd,
+    (userid) => {
+      user.getUserInfo(
+        userid,
+        (userinfo) => {
+          user.gerUserTire(
+            userinfo.amount,
+            userinfo.userid,
+            (usertire) => {
+              alert(
+                `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
+              );
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+};
+
+const user = new User();
+const startApp = confirm("push ok to start");
+if (startApp) {
+  const whichFunction = prompt(
+    "callback = put [c], promise = put [p], async = put [a]"
+  );
+  if (whichFunction === "c") {
+    callbackApp();
+  } else if (whichFunction === "p") {
+    promiseApp();
+  } else if (whichFunction === "a") {
+    asyncApp();
   }
-);
+}
+alert("end this App");
