@@ -72,6 +72,16 @@ const callbackApp = () => {
   );
 };
 
+//프로미스로 처리했을때
+//State : pending - fullfilled or rejected
+
+//1. Producer
+//새로운 프로미스를 만들면 excutor 콜백이 바로 실행된다.
+//excuter => resolve, reject를 가진 콜백
+
+//2. Consumers : then, catch, finally
+//
+//promise.then((value)=>{})
 const promiseApp = () => {
   const id = prompt("put your id");
   const pwd = prompt("put your password");
