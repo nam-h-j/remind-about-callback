@@ -1,6 +1,15 @@
 "use-strict";
+//2. PROMISE
+//1) State : pending - fullfilled or rejected
 
-// STEP1 CALL BACK HELL
+//2) Producer
+//새로운 프로미스를 만들면 excutor 콜백이 바로 실행된다.
+//excuter => resolve, reject를 가진 콜백
+
+//3) Consumers : then, catch, finally
+
+//promise.then((value)=>{})
+
 class User {
   //1.아이디, 비밀번호를 받아서 userid를 취득
   userLogin(userid, pwd, success, error) {
@@ -72,52 +81,7 @@ const callbackApp = () => {
   );
 };
 
-//프로미스로 처리했을때
-//State : pending - fullfilled or rejected
-
-//1. Producer
-//새로운 프로미스를 만들면 excutor 콜백이 바로 실행된다.
-//excuter => resolve, reject를 가진 콜백
-
-//2. Consumers : then, catch, finally
-//
-//promise.then((value)=>{})
-const promiseApp = () => {
-  const id = prompt("put your id");
-  const pwd = prompt("put your password");
-
-  user.userLogin(
-    id,
-    pwd,
-    (userid) => {
-      user.getUserInfo(
-        userid,
-        (userinfo) => {
-          user.gerUserTire(
-            userinfo.amount,
-            userinfo.userid,
-            (usertire) => {
-              alert(
-                `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
-              );
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
-
-const asyncApp = () => {
+const initApp = () => {
   const id = prompt("put your id");
   const pwd = prompt("put your password");
 
@@ -155,15 +119,6 @@ const asyncApp = () => {
 const user = new User();
 const startApp = confirm("push ok to start");
 if (startApp) {
-  const whichFunction = prompt(
-    "callback = put [c], promise = put [p], async = put [a]"
-  );
-  if (whichFunction === "c") {
-    callbackApp();
-  } else if (whichFunction === "p") {
-    promiseApp();
-  } else if (whichFunction === "a") {
-    asyncApp();
-  }
+  initApp();
 }
 alert("end this App");
