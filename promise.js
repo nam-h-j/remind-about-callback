@@ -1,4 +1,5 @@
 "use-strict";
+
 //2. PROMISE
 //1) State : pending - fullfilled or rejected
 
@@ -12,36 +13,42 @@
 
 class User {
   //1.아이디, 비밀번호를 받아서 userid를 취득
-  userLogin(userid, pwd, success, error) {
-    if (
-      (userid === "iamvip" && pwd === "pass") ||
-      (userid === "iamuser" && pwd === "pass")
-    ) {
-      success(userid);
-      console.log(userid);
-    } else {
-      error(new Error("login fail"));
-    }
+  userLogin(userid, pwd) {
+    return new Promise((resolve, reject) => {
+      if (
+        (userid === "iamvip" && pwd === "pass") ||
+        (userid === "iamuser" && pwd === "pass")
+      ) {
+        resolve(userid);
+        console.log(userid);
+      } else {
+        reject(new Error("login fail"));
+      }
+    });
   }
   //2. 로그인이 성공하면 userid로 유저 정보를 취득
-  getUserInfo(userid, success, error) {
-    if (userid === "iamvip") {
-      success({ userid: userid, amount: "20000" });
-    } else if (userid === "normal") {
-      success({ userid: userid, amount: "10" });
-    } else {
-      error(new Error("fail to get your amount"));
-    }
+  getUserInfo(userid) {
+    return new Promise((resolve, reject) => {
+      if (userid === "iamvip") {
+        resolve({ userid: userid, amount: "20000" });
+      } else if (userid === "normal") {
+        resolve({ userid: userid, amount: "10" });
+      } else {
+        reject(new Error("fail to get your amount"));
+      }
+    });
   }
   //3. 유저의 amount 정보를 가지고 유저의 티어를 결정
-  gerUserTire(amount, userid, success, error) {
-    if (amount > 10000) {
-      success({ userid: userid, amount: amount, tire: "VIP" });
-    } else if (amount < 10000 && amount > 0) {
-      success({ userid: userid, amount: amount, tire: "user" });
-    } else {
-      error(new Error("something went wrong"));
-    }
+  gerUserTire(amount, userid) {
+    return new Promise((resolve, reject) => {
+      if (amount > 10000) {
+        resolve({ userid: userid, amount: amount, tire: "VIP" });
+      } else if (amount < 10000 && amount > 0) {
+        resolve({ userid: userid, amount: amount, tire: "user" });
+      } else {
+        reject(new Error("something went wrong"));
+      }
+    });
   }
 }
 
@@ -85,40 +92,25 @@ const initApp = () => {
   const id = prompt("put your id");
   const pwd = prompt("put your password");
 
-  user.userLogin(
-    id,
-    pwd,
-    (userid) => {
-      user.getUserInfo(
-        userid,
-        (userinfo) => {
-          user.gerUserTire(
-            userinfo.amount,
-            userinfo.userid,
-            (usertire) => {
-              alert(
-                `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
-              );
-            },
-            (error) => {
-              console.log(error);
-            }
+  user
+    .userLogin(id, pwd)
+    .then(user.getUserInfo)
+    .then((userinfo) =>
+      user
+        .gerUserTire(userinfo.amount, userinfo.userid)
+        .then((usertire) => {
+          alert(
+            `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
           );
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
+        })
+        .catch((error) => console.log(error))
+    )
+    .catch((error) => console.log(error));
 };
 
 const user = new User();
 const startApp = confirm("push ok to start");
 if (startApp) {
   initApp();
+  alert("end this App");
 }
-alert("end this App");
