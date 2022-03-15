@@ -52,42 +52,6 @@ class User {
   }
 }
 
-//콜백으로 처리했을때
-const callbackApp = () => {
-  const id = prompt("put your id");
-  const pwd = prompt("put your password");
-
-  user.userLogin(
-    id,
-    pwd,
-    (userid) => {
-      user.getUserInfo(
-        userid,
-        (userinfo) => {
-          user.gerUserTire(
-            userinfo.amount,
-            userinfo.userid,
-            (usertire) => {
-              alert(
-                `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
-              );
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
-    (error) => {
-      console.log(error);
-    }
-  );
-};
-
 const initApp = () => {
   const id = prompt("put your id");
   const pwd = prompt("put your password");
