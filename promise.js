@@ -96,14 +96,11 @@ const initApp = () => {
     .userLogin(id, pwd)
     .then(user.getUserInfo)
     .then((userinfo) =>
-      user
-        .gerUserTire(userinfo.amount, userinfo.userid)
-        .then((usertire) => {
-          alert(
-            `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
-          );
-        })
-        .catch((error) => console.log(error))
+      user.gerUserTire(userinfo.amount, userinfo.userid).then((usertire) => {
+        alert(
+          `userid : ${usertire.userid} | amount : ${usertire.amount} | tire : ${usertire.tire}`
+        );
+      })
     )
     .catch((error) => console.log(error));
 };
